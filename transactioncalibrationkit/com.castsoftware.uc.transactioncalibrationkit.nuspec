@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>com.castsoftware.uc.transactioncalibrationkit</id>
+    <version>1.7.2</version>
+    <title>Transaction Calibration Kit</title>
+    <authors>CAST SMEs Group</authors>
+    <owners>CAST SMEs Group</owners>
+    <projectUrl>https://confluence.castsoftware.com/display/PSPS/Transaction+Calibration+Kit+for+8.1.X</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Provide default set of calibration scripts to ease the AFP configuration - CSS only</description>
+    <releaseNotes>1.7.2 Fine tuning of the Data Function Calibration with Cobol File Links </releaseNotes>
+    <tags>CSS</tags>
+    <dependencies>
+      <dependency id="CAIP" version="8.0" />
+    </dependencies>
+	<licenseUrl>https://help.castsoftware.com/hc/en-us/articles/212612648-Application-Intelligence-Platform-Extension-License</licenseUrl>
+  </metadata>
+</package>
