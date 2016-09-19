@@ -14,7 +14,7 @@ DECLARE
   v_cal_mergeroot_id integer;
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.1.x - 1.7.7
+-- Version 8.1.x - 1.7.8
   if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_DF_DELETE_RULE for appli_id ' || to_char(I_Appli_ID) || 'ENTRANCE ');   end if;
       -- Data entities are push to DELETED (8).
  UPDATE dss_datafunction df
@@ -53,6 +53,7 @@ from cdt_objects cob
          or cob.object_type_str = 'Siebel Table Repository'
          or cob.object_type_str = 'Siebel Table Virtual Table'
          or cob.object_type_str = 'Siebel Table Warehouse'
+		 or cob.object_type_str = 'DB400Table'
 		 )
      and (
          upper(cob.object_name) like '%_DUAL%'
@@ -150,7 +151,7 @@ $BODY$
 DECLARE  
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.1.x - 1.7.7
+-- Version 8.1.x - 1.7.8
 	if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_DF_ADJ_DETRET_RULE for appli_id ' || to_char(I_Appli_ID) || ' ENTRANCE'); end if;
 	if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_DF_ADJ_DETRET_RULE for appli_id ' || to_char(I_Appli_ID) || ' EXIT'); end if;
   Return L_ERRORCODE;
@@ -178,7 +179,7 @@ $BODY$
 DECLARE  
 L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.1.x - 1.7.7
+-- Version 8.1.x - 1.7.8
      if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_DF_IGNORE_RULE for appli_id ' || to_char(I_Appli_ID)|| ' ENTRANCE'); end if; 
 --- Ignore Unknown data entities
 perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_DF_IGNORE_RULE for appli_id ' || to_char(I_Appli_ID) || ' Ignore Unknown data entities'); 
@@ -232,7 +233,8 @@ from cdt_objects cob
          or cob.object_type_str = 'Siebel Table Log'
          or cob.object_type_str = 'Siebel Table Repository'
          or cob.object_type_str = 'Siebel Table Virtual Table'
-         or cob.object_type_str = 'Siebel Table Warehouse')
+         or cob.object_type_str = 'Siebel Table Warehouse'
+		 or cob.object_type_str = 'DB400Table')
      and appli_id = i_appli_id; 
        
   -- regular filter - on DB2 table, cobol file links
@@ -256,7 +258,8 @@ from cdt_objects cob
          or cob.object_type_str = 'SAP Table'
          or cob.object_type_str = 'Sybase table'
          or cob.object_type_str = 'Microsoft table'
-         or cob.object_type_str = 'SQL Server UDT TABLE')
+         or cob.object_type_str = 'SQL Server UDT TABLE'
+		 or cob.object_type_str = 'DB400Table')
             and (
                 upper(cob.object_name) like '%ADMIN%'
              or upper(cob.object_name) like '%ALERT%'
@@ -441,7 +444,7 @@ L_ERRORCODE          INTEGER DEFAULT 0;
 	   order by prefix_name asc ;
       
 Begin 
--- Version 8.1.x - 1.7.7
+-- Version 8.1.x - 1.7.8
      if ( I_CUSTOM_TRACE >  0 )
        then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_DF_GROUP_RULE for appli_id ' || to_char(I_Appli_ID));
        --- Group
@@ -606,7 +609,7 @@ $BODY$
 DECLARE  
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.1.x - 1.7.7
+-- Version 8.1.x - 1.7.8
 	if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_DF_ADJ_TYPE_RULE for appli_id ' || to_char(I_Appli_ID) || ' ENTRANCE '); 	end if;
 
  UPDATE dss_datafunction df 
@@ -703,7 +706,7 @@ DECLARE
   v_fp_id integer;
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.1.x - 1.7.7
+-- Version 8.1.x - 1.7.8
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_TF_DELETE_RULE for appli_id ' || to_char(I_Appli_ID)|| 'ENTRANCE '); end if;
 	
    -- DELETE
@@ -762,7 +765,7 @@ $BODY$
 DECLARE 
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.1.x - 1.7.7
+-- Version 8.1.x - 1.7.8
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_TF_IGNORE_RULE for appli_id ' || to_char(I_Appli_ID) || ' ENTRANCE'); end if;
 	
 UPDATE dss_transaction tra
@@ -845,7 +848,7 @@ DECLARE
 		  and d.appli_id = i_appli_id
           order by prefix_name asc ;
 Begin 
--- Version 8.1.x - 1.7.7
+-- Version 8.1.x - 1.7.8
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_TF_GROUP_RULE for appli_id ' || to_char(I_Appli_ID) || 'ENTRANCE'); end if;
 	
 --Merge duplicates - Action is to group element with the same name under a unique group. This is apply on both valid and ignored transaction since this will have an impact on the FTR.
@@ -954,7 +957,7 @@ $BODY$
 DECLARE 
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.1.x - 1.7.7
+-- Version 8.1.x - 1.7.8
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_TF_ADJ_DET_RULE ENTRANCE'); end if;
 	if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_TF_ADJ_DET_RULE EXIT'); end if;
   Return L_ERRORCODE;
@@ -982,7 +985,7 @@ $BODY$
 DECLARE 
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.1.x - 1.7.7
+-- Version 8.1.x - 1.7.8
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_TF_ADJ_FTR_RULE ENTRANCE'); end if;
 	
 UPDATE dss_transaction tra
@@ -1039,7 +1042,7 @@ $BODY$
 DECLARE 
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.1.x - 1.7.7
+-- Version 8.1.x - 1.7.8
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_FINAL_RULE ENTRANCE'); end if;
 UPDATE dss_transaction tra
     set user_fp_value = 4
