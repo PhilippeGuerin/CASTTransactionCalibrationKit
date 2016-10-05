@@ -2,14 +2,14 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>com.castsoftware.uc.transactioncalibrationkit</id>
-    <version>1.7.9</version>
+    <version>1.7.10</version>
     <title>Transaction Calibration Kit</title>
     <authors>CAST SMEs Group</authors>
     <owners>CAST SMEs Group</owners>
     <projectUrl>https://confluence.castsoftware.com/display/PSPS/Transaction+Calibration+Kit+for+8.1.X</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Provide default set of calibration scripts to ease the AFP configuration - CSS only</description>
-    <releaseNotes>Add filter for DDL Database Table created by the SQLScript extension. </releaseNotes>
+    <releaseNotes>bug fix on tcc_fp_usr_df_ignore_rule </releaseNotes>
     <tags>CSS</tags>
     <dependencies>
       <dependency id="CAIP" version="8.0" />
