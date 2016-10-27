@@ -2,15 +2,16 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>com.castsoftware.uc.transactioncalibrationkit</id>
-    <version>1.7.10</version>
+    <version>1.7.15</version>
     <title>Transaction Calibration Kit</title>
     <authors>CAST SMEs Group</authors>
     <owners>CAST SMEs Group</owners>
-    <projectUrl>https://confluence.castsoftware.com/display/PSPS/Transaction+Calibration+Kit+for+8.1.X</projectUrl>
+    <projectUrl>https://github.com/PhilippeGuerin/CASTTransactionCalibrationKit/wiki</projectUrl>
+	 <iconUrl>https://calliopeconsultinggroup.files.wordpress.com/2016/10/transactioncalibrationkit.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Provide default set of calibration scripts to ease the AFP configuration - CSS only</description>
-    <releaseNotes>bug fix on tcc_fp_usr_df_ignore_rule </releaseNotes>
-    <tags>CSS</tags>
+    <description>Provide default set of calibration scripts to ease the AFP configuration (grouping, spliting, ignore, delete, overwrite of type or complexity) - CSS only</description>
+    <releaseNotes>Extension can be uninstall</releaseNotes>
+    <tags>AFP CAIP8.2Beta CAIP8.1 CSS </tags>
     <dependencies>
       <dependency id="CAIP" version="8.0" />
     </dependencies>

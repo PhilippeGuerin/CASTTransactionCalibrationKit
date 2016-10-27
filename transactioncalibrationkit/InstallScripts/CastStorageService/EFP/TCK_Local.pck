@@ -11,6 +11,8 @@
 	<Exclude>
 	</Exclude>
 	<Install>
+			<Step Type="PROC" Option="4" File="TCK_LocalProcedures.sql" />
+	        <Step Type="PROC" File="TCK_ActivateTCCcustom.sql" />
 	</Install>
 	<Update>
 	</Update>
@@ -19,5 +21,7 @@
 	    <Step Type="PROC" File="TCK_ActivateTCCcustom.sql" />
 	</Refresh>
 	<Remove>
+			<Step Type="PROC" Option="4" File="TCK_CleanLocalProcedures.sql" />
+	        <Step Type="PROC" File="TCK_DeActivateTCCcustom.sql" />
 	</Remove>
 </Package>

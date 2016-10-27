@@ -1,0 +1,2 @@
+select SET_TCC_OPTION_FPCUSTOM (0,0)
+/
