@@ -14,7 +14,7 @@ DECLARE
   v_cal_mergeroot_id integer;
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.1.x - 1.7.10
+-- Version 8.1.x - 1.7.20
   if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_DF_DELETE_RULE for appli_id ' || to_char(I_Appli_ID) || 'ENTRANCE ');   end if;
       -- Data entities are push to DELETED (8).
  UPDATE dss_datafunction df
@@ -58,36 +58,45 @@ from cdt_objects cob
 		 )
      and (
          upper(cob.object_name) like '%_DUAL%'
+		 or upper(cob.object_name) like 'TEST'
+		 or upper(cob.object_name) like 'TEST?'
+		 or upper(cob.object_name) like 'ERROR'
          or upper(cob.object_name) like '%\_DUMMY%'
          or upper(cob.object_name) like '%\_ERR%'
          or upper(cob.object_name) like '%-ERR%'
+         or upper(cob.object_name) like '%\_ERROR%'
+         or upper(cob.object_name) like '%-ERROR%'
          or upper(cob.object_name) like '%\_LOG%'
          or upper(cob.object_name) like '%\_OLD%'
          or upper(cob.object_name) like '%\_BAD%'
          or upper(cob.object_name) like '%\_BAK%'
          or upper(cob.object_name) like '%\_BKUP%'
          or upper(cob.object_name) like '%\_BK%'
+         or upper(cob.object_name) like '%\_BACKUP%'
          or upper(cob.object_name) like '%\_LOG'             
          or upper(cob.object_name) like '%\_HST'
-	 or upper(cob.object_name) like '%\_HIST'
-	 or upper(cob.object_name) like '%-DUAL%'
+         or upper(cob.object_name) like '%\_HISTORY%'
+	     or upper(cob.object_name) like '%\_HIST'
+	     or upper(cob.object_name) like '%-DUAL%'
          or upper(cob.object_name) like '%\-DUMMY%'
          or upper(cob.object_name) like '%\-LOG%'
          or upper(cob.object_name) like '%\-OLD%'
          or upper(cob.object_name) like '%\-BAD%'
          or upper(cob.object_name) like '%\-BAK%'
-         or upper(cob.object_name) like '%\-BKUP%'
+         or upper(cob.object_name) like '%\-BKUP%'		 
+         or upper(cob.object_name) like '%\-BACKUP%'
          or upper(cob.object_name) like '%\-BK%'
          or upper(cob.object_name) like '%\-LOG'             
          or upper(cob.object_name) like '%\-HST'
-	 or upper(cob.object_name) like '%\-HIST'
+         or upper(cob.object_name) like '%\-HISTORY%'
+	     or upper(cob.object_name) like '%\-HIST'
          or upper(cob.object_name) like '%\-H'
-	 or upper(cob.object_name) like '%\_H'		 
+	     or upper(cob.object_name) like '%\_H'		 
          or upper(cob.object_name) like 'LOG\-%'
-	 or upper(cob.object_name) like 'LOG\_%'
-	 or upper(cob.object_name) like '%LOG'
+	     or upper(cob.object_name) like 'LOG\_%'
+	     or upper(cob.object_name) like '%LOG'
          or upper(cob.object_name) like 'ERR\-%'
-	 or upper(cob.object_name) like 'ERR\_%'		 
+		 or upper(cob.object_name) like 'ERR\_%'		 
          or upper(cob.object_name) like '%TEST%'
          or upper(cob.object_name) like '%ERROR%'
          or upper(cob.object_name) like '%ERLOG%'
@@ -152,7 +161,7 @@ $BODY$
 DECLARE  
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.1.x - 1.7.10
+-- Version 8.1.x - 1.7.20
 	if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_DF_ADJ_DETRET_RULE for appli_id ' || to_char(I_Appli_ID) || ' ENTRANCE'); end if;
 	if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_DF_ADJ_DETRET_RULE for appli_id ' || to_char(I_Appli_ID) || ' EXIT'); end if;
   Return L_ERRORCODE;
@@ -180,7 +189,7 @@ $BODY$
 DECLARE  
 L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.1.x - 1.7.10
+-- Version 8.1.x - 1.7.20
      if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_DF_IGNORE_RULE for appli_id ' || to_char(I_Appli_ID)|| ' ENTRANCE'); end if; 
 --- Ignore Unknown data entities
 perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_DF_IGNORE_RULE for appli_id ' || to_char(I_Appli_ID) || ' Ignore Unknown data entities'); 
@@ -447,7 +456,7 @@ L_ERRORCODE          INTEGER DEFAULT 0;
 	   order by prefix_name asc ;
       
 Begin 
--- Version 8.1.x - 1.7.10
+-- Version 8.1.x - 1.7.20
      if ( I_CUSTOM_TRACE >  0 )
        then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_DF_GROUP_RULE for appli_id ' || to_char(I_Appli_ID));
        --- Group
@@ -505,7 +514,8 @@ Begin
             -- parent is a child in a existing group
             --put child (r2.fp_id) cal_flags to 4
             --put child (r2.fp_id) cal_mergeroot_id to v_cal_mergeroot_id
-            update dss_datafunction set cal_flags = 4,cal_mergeroot_id = v_cal_mergeroot_id where object_id = r2.fp_id and appli_id = i_appli_id;
+			-- adding constraint  and object_id != v_cal_mergeroot_id in order to fix the SCRAIP-22868
+            update dss_datafunction set cal_flags = 4,cal_mergeroot_id = v_cal_mergeroot_id where object_id = r2.fp_id and appli_id = i_appli_id and object_id != v_cal_mergeroot_id;
         else
         if(v_cal_flags = 256) then
             -- parent is ignored
@@ -525,7 +535,8 @@ Begin
             -- parent is ignored and child
             --put child (r2.fp_id) cal_flags to 260
             --put child (r2.fp_id) cal_mergeroot_id to v_cal_mergeroot_id
-            update dss_datafunction set cal_flags = 260,cal_mergeroot_id = v_cal_mergeroot_id where object_id = r2.fp_id and appli_id = i_appli_id;
+            -- adding constraint  and object_id != v_cal_mergeroot_id in order to fix the SCRAIP-22868 (ticket 7458)
+			update dss_datafunction set cal_flags = 260,cal_mergeroot_id = v_cal_mergeroot_id where object_id = r2.fp_id and appli_id = i_appli_id and object_id != v_cal_mergeroot_id;
         end if; end if;end if;end if;end if;end if;
     end if;
   end loop;
@@ -561,7 +572,8 @@ Begin
             -- parent is a child in a existing group
             --put child (r2.fp_id) cal_flags to 4
             --put child (r2.fp_id) cal_mergeroot_id to v_cal_mergeroot_id
-            update dss_datafunction set cal_flags = 4,cal_mergeroot_id = v_cal_mergeroot_id where object_id = r2.fp_id and appli_id = i_appli_id;
+			-- adding constraint  and object_id != v_cal_mergeroot_id in order to fix the SCRAIP-22868 (ticket 7458)
+            update dss_datafunction set cal_flags = 4,cal_mergeroot_id = v_cal_mergeroot_id where object_id = r2.fp_id and appli_id = i_appli_id and object_id != v_cal_mergeroot_id;
         else 
         if(v_cal_flags = 256) then
             -- parent is ignored
@@ -581,10 +593,19 @@ Begin
             -- parent is ignored and child
             --put child (r2.fp_id) cal_flags to 260
             --put child (r2.fp_id) cal_mergeroot_id to v_cal_mergeroot_id
-            update dss_datafunction set cal_flags = 260,cal_mergeroot_id = v_cal_mergeroot_id where object_id = r2.fp_id and appli_id = i_appli_id;
+			-- adding constraint  and object_id != v_cal_mergeroot_id in order to fix the SCRAIP-22868 (ticket 7458)
+            update dss_datafunction set cal_flags = 260,cal_mergeroot_id = v_cal_mergeroot_id where object_id = r2.fp_id and appli_id = i_appli_id and object_id != v_cal_mergeroot_id;
         end if; end if;end if;end if;end if;end if;
     end if;
   end loop;
+   
+    -- Remove invalid self-merge of a Data Function to itself (SCRAIP-22730)
+    Update DSS_DataFunction
+       Set Cal_MergeRoot_ID = 0          -- The affected DF stops having itself as merge root
+         , Cal_Flags = ( Cal_Flags - 4 ) -- The affected DF stops being a merged item of itself
+     Where Object_ID = Cal_MergeRoot_ID
+       And Appli_ID = I_Appli_ID;
+ 
    
      end if;
   Return L_ERRORCODE;
@@ -612,7 +633,7 @@ $BODY$
 DECLARE  
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.1.x - 1.7.10
+-- Version 8.1.x - 1.7.20
 	if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_DF_ADJ_TYPE_RULE for appli_id ' || to_char(I_Appli_ID) || ' ENTRANCE '); 	end if;
 
  UPDATE dss_datafunction df 
@@ -709,7 +730,7 @@ DECLARE
   v_fp_id integer;
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.1.x - 1.7.10
+-- Version 8.1.x - 1.7.20
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_TF_DELETE_RULE for appli_id ' || to_char(I_Appli_ID)|| 'ENTRANCE '); end if;
 	
    -- DELETE
@@ -734,6 +755,7 @@ from cdt_objects cob
      and (upper(cob.object_name) like '%.JS'
             or upper(cob.object_name) like '%.INC'
             or upper(cob.object_name) like '%ERROR%' 
+			or upper(cob.object_name) like '%.CSS' 
 		    or (cob.object_name = '1000' and cob.object_type_str = 'ABAP Selection Screen')
           ) 
 	and appli_id = i_appli_id;
@@ -768,7 +790,7 @@ $BODY$
 DECLARE 
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.1.x - 1.7.10
+-- Version 8.1.x - 1.7.20
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_TF_IGNORE_RULE for appli_id ' || to_char(I_Appli_ID) || ' ENTRANCE'); end if;
 	
 UPDATE dss_transaction tra
@@ -851,7 +873,7 @@ DECLARE
 		  and d.appli_id = i_appli_id
           order by prefix_name asc ;
 Begin 
--- Version 8.1.x - 1.7.10
+-- Version 8.1.x - 1.7.20
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_TF_GROUP_RULE for appli_id ' || to_char(I_Appli_ID) || 'ENTRANCE'); end if;
 	
 --Merge duplicates - Action is to group element with the same name under a unique group. This is apply on both valid and ignored transaction since this will have an impact on the FTR.
@@ -908,7 +930,7 @@ Begin
             -- parent is a child in a existing group
             --put child (r2.fp_id) cal_flags to 4
             --put child (r2.fp_id) cal_mergeroot_id to v_cal_mergeroot_id
-            update dss_transaction set cal_flags = 4,cal_mergeroot_id = v_cal_mergeroot_id where object_id = r2.fp_id and appli_id = i_appli_id ;
+            update dss_transaction set cal_flags = 4,cal_mergeroot_id = v_cal_mergeroot_id where object_id = r2.fp_id and appli_id = i_appli_id and object_id != v_cal_mergeroot_id;
         else 
         if(v_cal_flags = 256) then
             -- parent is ignored
@@ -928,10 +950,11 @@ Begin
             -- parent is ignored and child
             --put child (r2.fp_id) cal_flags to 260
             --put child (r2.fp_id) cal_mergeroot_id to v_cal_mergeroot_id
-            update dss_transaction set cal_flags = 260,cal_mergeroot_id = v_cal_mergeroot_id where object_id = r2.fp_id and appli_id = i_appli_id;
+            update dss_transaction set cal_flags = 260,cal_mergeroot_id = v_cal_mergeroot_id where object_id = r2.fp_id and appli_id = i_appli_id and object_id != v_cal_mergeroot_id;
         end if; end if;end if;end if;end if;end if;
     end if;
   end loop;
+  
   
       if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_TF_GROUP_RULE for appli_id ' || to_char(I_Appli_ID) || 'END OF LOOP 2 '); end if;
       if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_TF_GROUP_RULE for appli_id ' || to_char(I_Appli_ID) || 'EXIT '); end if;	  
@@ -960,7 +983,7 @@ $BODY$
 DECLARE 
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.1.x - 1.7.10
+-- Version 8.1.x - 1.7.20
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_TF_ADJ_DET_RULE ENTRANCE'); end if;
 	if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_TF_ADJ_DET_RULE EXIT'); end if;
   Return L_ERRORCODE;
@@ -988,7 +1011,7 @@ $BODY$
 DECLARE 
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.1.x - 1.7.10
+-- Version 8.1.x - 1.7.20
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_TF_ADJ_FTR_RULE ENTRANCE'); end if;
 	
 UPDATE dss_transaction tra
@@ -1045,7 +1068,7 @@ $BODY$
 DECLARE 
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.1.x - 1.7.10
+-- Version 8.1.x - 1.7.20
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_FINAL_RULE ENTRANCE'); end if;
 UPDATE dss_transaction tra
     set user_fp_value = 4

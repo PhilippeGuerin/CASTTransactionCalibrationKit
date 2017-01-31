@@ -1,19 +1,19 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
-    <id>com.castsoftware.uc.transactioncalibrationkit</id>
-    <version>1.7.15</version>
+    <id>com.castsoftware.labs.transactioncalibrationkit</id>
+    <version>1.7.22</version>
     <title>Transaction Calibration Kit</title>
-    <authors>CAST SMEs Group</authors>
+    <authors>CAST Labs</authors>
     <owners>CAST SMEs Group</owners>
     <projectUrl>https://github.com/PhilippeGuerin/CASTTransactionCalibrationKit/wiki</projectUrl>
-	 <iconUrl>https://calliopeconsultinggroup.files.wordpress.com/2016/10/transactioncalibrationkit.png</iconUrl>
+	 <iconUrl>https://github.com/PhilippeGuerin/CASTTransactionCalibrationKit/blob/master/TransactionCalibrationKit.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Provide default set of calibration scripts to ease the AFP configuration (grouping, spliting, ignore, delete, overwrite of type or complexity) - CSS only</description>
-    <releaseNotes>Extension can be uninstall</releaseNotes>
-    <tags>AFP CAIP8.2Beta CAIP8.1 CSS </tags>
+    <releaseNotes>fix SCRAIP-22868, SCRAIP-22730 and ticket #7426</releaseNotes>
+    <tags>AFP CAIP8.2 CAIP8.1 CSS </tags>
     <dependencies>
-      <dependency id="CAIP" version="8.0" />
+      <dependency id="CAIP" version="8.1" />
     </dependencies>
 	<licenseUrl>https://help.castsoftware.com/hc/en-us/articles/212612648-Application-Intelligence-Platform-Extension-License</licenseUrl>
   </metadata>
