@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>com.castsoftware.uc.transactioncalibrationkit</id>
+    <version>1.8.0</version>
+    <title>Transaction Calibration Kit</title>
+    <authors>CAST Labs</authors>
+    <owners>CAST SMEs Group</owners>
+    <projectUrl>https://github.com/PhilippeGuerin/CASTTransactionCalibrationKit/wiki</projectUrl>
+	 <iconUrl>https://raw.githubusercontent.com/PhilippeGuerin/CASTTransactionCalibrationKit/master/TransactionCalibrationKit.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Provide default set of calibration scripts to perform automatically activity such as deletion, ignore, grouping, splitting, overwrite type, overwrite complexity of transaction. All of this in order to ease the review of transaction and estimation the accurate OMG FP measurement.</description>
+    <releaseNotes>Migration to Extend</releaseNotes>
+    <tags>CASTLabs LongTerm Configuration FP CAIP8.2.x CAIP8.1.x CSS</tags>
+    <dependencies>
+      <dependency id="CAIP" version="8.1" />
+    </dependencies>
+	<licenseUrl>https://help.castsoftware.com/hc/en-us/articles/212612648-Application-Intelligence-Platform-Extension-License</licenseUrl>
+  </metadata>
+</package>
