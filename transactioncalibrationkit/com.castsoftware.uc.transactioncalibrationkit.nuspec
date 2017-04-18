@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>com.castsoftware.uc.transactioncalibrationkit</id>
-    <version>1.8.1</version>
+    <version>1.8.2</version>
     <title>Transaction Calibration Kit</title>
     <authors>CAST Labs</authors>
     <owners>CAST</owners>
