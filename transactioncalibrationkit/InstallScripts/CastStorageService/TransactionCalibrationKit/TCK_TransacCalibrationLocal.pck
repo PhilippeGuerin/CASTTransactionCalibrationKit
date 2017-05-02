@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-<Package	PackName = "TCK_LOCAL"
+<Package	PackName = "TCK_TransacCalibrationLOCAL"
 			Type = "INTERNAL"
  			Version ="1.7.11"
 			SupportedServer = "ALL"
 			Display="TCK"
-			Description="Automated Fonction Points - Calibration kit"
+			Description="Automated Fonction Points - Transaction Calibration kit"
       DatabaseKind="KB_LOCAL" >
 	<Include>
 		<PackName>DSSAPP_LOCAL</PackName>
