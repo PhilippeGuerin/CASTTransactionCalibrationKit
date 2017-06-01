@@ -225,7 +225,6 @@ $BODY$
 DECLARE 
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.1.x - 1.7.10
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_TF_ADJ_DET_RULE ENTRANCE'); end if;
 	if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_TF_ADJ_DET_RULE EXIT'); end if;
   Return L_ERRORCODE;
@@ -239,7 +238,33 @@ ALTER FUNCTION tcc_fp_usr_tf_adj_det_rule(integer)
 /
 
   
-  
+-- *********************************************************************************  
+-- *************************  tcc_fp_usr_tf_adj_type_rule  ***************************  
+-- *********************************************************************************   
+-- Function: tcc_fp_usr_tf_adj_type_rule(integer)
+
+-- DROP FUNCTION tcc_fp_usr_tf_adj_type_rule(integer);
+
+CREATE OR REPLACE FUNCTION tcc_fp_usr_tf_adj_type_rule(i_custom_trace integer)
+  RETURNS integer AS
+$BODY$
+DECLARE 
+ L_ERRORCODE          INTEGER DEFAULT 0;
+Begin 
+
+    if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- tcc_fp_usr_tf_adj_type_rule ENTRANCE'); end if;
+	
+	if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- tcc_fp_usr_tf_adj_type_rule EXIT'); end if;
+  Return L_ERRORCODE;
+END;
+$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100
+/
+ALTER FUNCTION tcc_fp_usr_tf_adj_type_rule(integer)
+  OWNER TO operator
+/ 
+ 
 -- *********************************************************************************  
 -- *************************  tcc_fp_usr_tf_adj_ftr_rule  ***************************  
 -- *********************************************************************************   

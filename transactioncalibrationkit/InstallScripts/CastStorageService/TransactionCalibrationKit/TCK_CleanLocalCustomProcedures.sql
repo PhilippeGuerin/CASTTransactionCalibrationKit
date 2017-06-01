@@ -1,0 +1,12 @@
+DROP FUNCTION custom_tcc_fp_usr_df_delete_rule(integer, integer);
+DROP FUNCTION custom_tcc_fp_usr_df_adj_detret_rule(integer, integer);
+DROP FUNCTION custom_tcc_fp_usr_df_ignore_rule(integer, integer);
+DROP FUNCTION custom_tcc_fp_usr_df_group_rule(integer, integer);
+DROP FUNCTION custom_tcc_fp_usr_df_adj_type_rule(integer, integer);
+DROP FUNCTION custom_tcc_fp_usr_tf_delete_rule(integer, integer);
+DROP FUNCTION custom_tcc_fp_usr_tf_ignore_rule(integer, integer);
+DROP FUNCTION custom_tcc_fp_usr_tf_group_rule(integer, integer);
+DROP FUNCTION custom_tcc_fp_usr_tf_adj_det_rule(integer);
+DROP FUNCTION custom_tcc_fp_usr_tf_adj_type_rule(integer);
+DROP FUNCTION custom_tcc_fp_usr_tf_adj_ftr_rule(integer);
+DROP FUNCTION custom_tcc_fp_usr_final_rule(integer);

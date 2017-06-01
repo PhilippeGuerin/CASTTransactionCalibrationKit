@@ -14,7 +14,7 @@ DECLARE
   v_cal_mergeroot_id integer;
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.2.x - 1.8.2
+-- Version 8.2.x - 1.9.0
   if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_DF_DELETE_RULE for appli_id ' || to_char(I_Appli_ID) || 'ENTRANCE ');   end if;
       -- Data entities are push to DELETED (8).
  UPDATE dss_datafunction df
@@ -135,6 +135,10 @@ from cdt_objects cob
      and appli_id = i_appli_id; 
 
   if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_DF_DELETE_RULE for appli_id ' || to_char(I_Appli_ID) || 'EXIT ');   end if;	
+
+  if ( I_CUSTOM_TRACE >  0 ) then  perform custom_tcc_fp_usr_df_delete_rule(i_appli_id, i_custom_trace);   end if;		
+  
+  
   Return L_ERRORCODE;
 END;
 $BODY$
@@ -161,9 +165,10 @@ $BODY$
 DECLARE  
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.2.x - 1.8.2
+-- Version 8.2.x - 1.9.0
 	if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_DF_ADJ_DETRET_RULE for appli_id ' || to_char(I_Appli_ID) || ' ENTRANCE'); end if;
 	if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_DF_ADJ_DETRET_RULE for appli_id ' || to_char(I_Appli_ID) || ' EXIT'); end if;
+    if ( I_CUSTOM_TRACE >  0 ) then  perform custom_tcc_fp_usr_df_adj_detret_rule(i_appli_id, i_custom_trace);   end if;
   Return L_ERRORCODE;
 
 END;
@@ -189,7 +194,7 @@ $BODY$
 DECLARE  
 L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.2.x - 1.8.2
+-- Version 8.2.x - 1.9.0
      if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_DF_IGNORE_RULE for appli_id ' || to_char(I_Appli_ID)|| ' ENTRANCE'); end if; 
 --- Ignore Unknown data entities
 perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_DF_IGNORE_RULE for appli_id ' || to_char(I_Appli_ID) || ' Ignore Unknown data entities'); 
@@ -395,6 +400,7 @@ from cdt_objects cob
     end if;
 	
      if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_DF_IGNORE_RULE for appli_id ' || to_char(I_Appli_ID)|| ' EXIT'); end if; 
+	 if ( I_CUSTOM_TRACE >  0 ) then  perform custom_tcc_fp_usr_df_ignore_rule(i_appli_id, i_custom_trace);   end if;
   Return L_ERRORCODE;
 END;
 $BODY$
@@ -456,7 +462,7 @@ L_ERRORCODE          INTEGER DEFAULT 0;
 	   order by prefix_name asc ;
       
 Begin 
--- Version 8.2.x - 1.8.2
+-- Version 8.2.x - 1.9.0
      if ( I_CUSTOM_TRACE >  0 )
        then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_DF_GROUP_RULE for appli_id ' || to_char(I_Appli_ID));
        --- Group
@@ -608,6 +614,7 @@ Begin
  
    
      end if;
+	 if ( I_CUSTOM_TRACE >  0 ) then  perform custom_tcc_fp_usr_df_group_rule(i_appli_id, i_custom_trace);   end if;
   Return L_ERRORCODE;
 END;
 $BODY$
@@ -633,7 +640,7 @@ $BODY$
 DECLARE  
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.2.x - 1.8.2
+-- Version 8.2.x - 1.9.0
 	if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_DF_ADJ_TYPE_RULE for appli_id ' || to_char(I_Appli_ID) || ' ENTRANCE '); 	end if;
 
  UPDATE dss_datafunction df 
@@ -703,6 +710,7 @@ Begin
 	  and df.appli_id = i_appli_id;
           
 	if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_DF_ADJ_TYPE_RULE for appli_id ' || to_char(I_Appli_ID) || ' EXIT '); 	end if;
+	if ( I_CUSTOM_TRACE >  0 ) then  perform custom_tcc_fp_usr_df_adj_type_rule(i_appli_id, i_custom_trace);   end if;
   Return L_ERRORCODE;
 END;
 $BODY$
@@ -730,7 +738,7 @@ DECLARE
   v_fp_id integer;
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.2.x - 1.8.2
+-- Version 8.2.x - 1.9.0
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_TF_DELETE_RULE for appli_id ' || to_char(I_Appli_ID)|| 'ENTRANCE '); end if;
 	
    -- DELETE
@@ -764,7 +772,7 @@ from cdt_objects cob
  
 	
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_TF_DELETE_RULE for appli_id ' || to_char(I_Appli_ID)|| 'EXIT '); end if;       
-
+    if ( I_CUSTOM_TRACE >  0 ) then  perform custom_tcc_fp_usr_tf_delete_rule(i_appli_id, i_custom_trace);   end if;
   Return L_ERRORCODE;
 END;
 $BODY$
@@ -790,7 +798,7 @@ $BODY$
 DECLARE 
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.2.x - 1.8.2
+-- Version 8.2.x - 1.9.0
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_TF_IGNORE_RULE for appli_id ' || to_char(I_Appli_ID) || ' ENTRANCE'); end if;
 	
 UPDATE dss_transaction tra
@@ -815,6 +823,7 @@ from cdt_objects cob
 	and appli_id = i_appli_id;
 	
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_TF_IGNORE_RULE for appli_id ' || to_char(I_Appli_ID) || ' EXIT'); end if;
+	if ( I_CUSTOM_TRACE >  0 ) then  perform custom_tcc_fp_usr_tf_ignore_rule(i_appli_id, i_custom_trace);   end if;
   Return L_ERRORCODE;
 END;
 $BODY$
@@ -873,7 +882,7 @@ DECLARE
 		  and d.appli_id = i_appli_id
           order by prefix_name asc ;
 Begin 
--- Version 8.2.x - 1.8.2
+-- Version 8.2.x - 1.9.0
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_TF_GROUP_RULE for appli_id ' || to_char(I_Appli_ID) || 'ENTRANCE'); end if;
 	
 --Merge duplicates - Action is to group element with the same name under a unique group. This is apply on both valid and ignored transaction since this will have an impact on the FTR.
@@ -958,6 +967,7 @@ Begin
   
       if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_TF_GROUP_RULE for appli_id ' || to_char(I_Appli_ID) || 'END OF LOOP 2 '); end if;
       if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_TF_GROUP_RULE for appli_id ' || to_char(I_Appli_ID) || 'EXIT '); end if;	  
+	  if ( I_CUSTOM_TRACE >  0 ) then  perform custom_tcc_fp_usr_tf_group_rule(i_appli_id, i_custom_trace);   end if;
   Return L_ERRORCODE;
 END;
 $BODY$
@@ -983,9 +993,10 @@ $BODY$
 DECLARE 
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.2.x - 1.8.2
+-- Version 8.2.x - 1.9.0
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_TF_ADJ_DET_RULE ENTRANCE'); end if;
 	if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_TF_ADJ_DET_RULE EXIT'); end if;
+	if ( I_CUSTOM_TRACE >  0 ) then  perform custom_tcc_fp_usr_tf_adj_det_rule(i_custom_trace);   end if;
   Return L_ERRORCODE;
 END;
 $BODY$
@@ -996,6 +1007,9 @@ ALTER FUNCTION tcc_fp_usr_tf_adj_det_rule(integer)
   OWNER TO operator
 /
 
+-- *********************************************************************************  
+-- *************************  tcc_fp_usr_tf_adj_type_rule  ***************************  
+-- *********************************************************************************  
 -- Function: tcc_fp_usr_tf_adj_type_rule(integer)
 
 -- DROP FUNCTION tcc_fp_usr_tf_adj_type_rule(integer);
@@ -1006,7 +1020,7 @@ $BODY$
 DECLARE  
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.2.x - 1.8.2
+-- Version 8.2.x - 1.9.0
 	if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_TF_ADJ_TYPE_RULE ENTRANCE');  end if;
 	  UPDATE dss_transaction tra
      set user_isinput = 0
@@ -1035,6 +1049,7 @@ from cdt_objects cob
           or upper(cob.object_name) like '%UPDATE%'
           or upper(cob.object_name) like '%CONFIRM%');
 	 if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_TF_ADJ_TYPE_RULE EXIT');  end if;
+	 if ( I_CUSTOM_TRACE >  0 ) then  perform custom_tcc_fp_usr_tf_adj_type_rule(i_custom_trace);   end if;
   Return L_ERRORCODE;
 
 END;
@@ -1059,13 +1074,13 @@ $BODY$
 DECLARE 
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.2.x - 1.8.2
+-- Version 8.2.x - 1.9.0
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_TF_ADJ_FTR_RULE ENTRANCE'); end if;
 	
 
 		  
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_TF_ADJ_FTR_RULE EXIT'); end if;
-  
+  	if ( I_CUSTOM_TRACE >  0 ) then  perform custom_tcc_fp_usr_tf_adj_ftr_rule(i_custom_trace);   end if;
   Return L_ERRORCODE;
 END;
 $BODY$
@@ -1091,7 +1106,7 @@ $BODY$
 DECLARE 
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.2.x - 1.8.2
+-- Version 8.2.x - 1.9.0
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_FINAL_RULE ENTRANCE'); end if;
 UPDATE dss_transaction tra
     set user_fp_value = 4
@@ -1142,6 +1157,7 @@ update dss_transaction
  ;
 */				
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_FINAL_RULE EXIT'); end if;
+	if ( I_CUSTOM_TRACE >  0 ) then  perform custom_tcc_fp_usr_final_rule(i_custom_trace);   end if;
   Return L_ERRORCODE;
 END;
 $BODY$

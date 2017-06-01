@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <Package	PackName = "TCK_TransacCalibrationLOCAL"
 			Type = "INTERNAL"
- 			Version ="1.7.11"
+ 			Version ="1.9.0"
 			SupportedServer = "ALL"
 			Display="TCK"
 			Description="Automated Fonction Points - Transaction Calibration kit"
@@ -13,6 +13,7 @@
 	<Exclude>
 	</Exclude>
 	<Install>
+	     <Step Type="PROC" Option="4" File="TCK_LocalCustomProcedures.sql" />
 	</Install>
 	<Update>
 	</Update>
@@ -22,6 +23,7 @@
 	</Refresh>
 	<Remove>
 			<Step Type="PROC" Option="4" File="TCK_CleanLocalProcedures.sql" />
+			<Step Type="PROC" Option="4" File="TCK_CleanLocalCustomProcedures.sql" />
 	        <Step Type="PROC" File="TCK_DeActivateTCCcustom.sql" />
 	</Remove>
 </Package>
