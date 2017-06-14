@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <Package	PackName = "TCK_TransacCalibrationLOCAL"
 			Type = "INTERNAL"
- 			Version ="1.9.0"
+ 			Version ="1.9.1"
 			SupportedServer = "ALL"
 			Display="TCK"
 			Description="Automated Fonction Points - Transaction Calibration kit"

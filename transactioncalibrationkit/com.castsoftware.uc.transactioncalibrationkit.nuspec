@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>com.castsoftware.uc.transactioncalibrationkit</id>
-    <version>1.9.0</version>
+    <version>1.9.1</version>
     <title>Transaction Calibration Kit</title>
     <authors>CAST Labs</authors>
     <owners>CAST</owners>
@@ -10,7 +10,7 @@
 	 <iconUrl>https://raw.githubusercontent.com/PhilippeGuerin/CASTTransactionCalibrationKit/master/TransactionCalibrationKit.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Provide default set of calibration scripts to perform automatically activity such as deletion, ignore, grouping, splitting, overwrite type, overwrite complexity of transaction. All of this in order to ease the review of transaction and estimation the accurate OMG FP measurement.</description>
-    <releaseNotes>Add new set of custom procedure in order inject custom calibration after the default calibration from the kit. </releaseNotes>
+    <releaseNotes>Add installation script enhancement in case of the extension is already installed and required creation of custom procedures</releaseNotes>
     <tags>CASTLabs LongTerm CAIP8.2.x CAIP8.1.x CAIP8.0.x CSS FPQuality FPConfiguration Configuration</tags>
     <dependencies>
       <dependency id="CAIP" version="8.1" />

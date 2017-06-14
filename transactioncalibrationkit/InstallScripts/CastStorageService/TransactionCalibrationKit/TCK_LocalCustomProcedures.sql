@@ -6,6 +6,13 @@
 
 -- DROP FUNCTION custom_tcc_fp_usr_df_delete_rule(integer, integer);
 
+BEGIN
+IF (SELECT count(1) FROM information_schema.routines JOIN information_schema.parameters ON routines.specific_name=parameters.specific_name WHERE routines.specific_schema=current_schema()
+ and routine_name = 'custom_tcc_fp_usr_df_delete_rule')  > 0 THEN
+
+ -- CUSTOM ALREADY THERE
+
+ELSE 
 CREATE OR REPLACE FUNCTION custom_tcc_fp_usr_df_delete_rule(i_appli_id integer, i_custom_trace integer)
   RETURNS integer AS
 $BODY$
@@ -25,6 +32,9 @@ $BODY$
 ALTER FUNCTION custom_tcc_fp_usr_df_delete_rule(integer, integer)
   OWNER TO operator
 /
+
+
+
 
 
   
@@ -340,4 +350,8 @@ ALTER FUNCTION custom_tcc_fp_usr_final_rule(integer)
   OWNER TO operator
 /
 
-  
+
+END IF
+/
+END
+/
