@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>com.castsoftware.uc.transactioncalibrationkit</id>
-    <version>1.9.6</version>
+    <version>1.9.8</version>
     <title>SME KIT - Transaction Calibration Kit</title>
     <authors>CAST Labs</authors>
     <owners>CAST</owners>
@@ -10,7 +10,7 @@
 	 <iconUrl>https://raw.githubusercontent.com/PhilippeGuerin/CASTTransactionCalibrationKit/master/TransactionCalibrationKit.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Provide default set of calibration scripts to perform automatically activity such as deletion, ignore, grouping, splitting, overwrite type, overwrite complexity of transaction. All of this in order to ease the review of transaction and estimation the accurate OMG FP measurement.</description>
-    <releaseNotes>Force the rerun of ignore and delete before apply grouping rules. (SCRAIP-27718)</releaseNotes>
+    <releaseNotes>Force the rerun of ignore and delete before apply grouping rules. (SCRAIP-27718) - Update of the grouping procedure in order to filter out any ignore or deleted object as potential grouping element</releaseNotes>
     <tags>CASTLabs LongTerm CAIP8.2.x CAIP8.1.x CAIP8.0.x CSS FPQuality FPConfiguration Configuration</tags>
     <dependencies>
       <dependency id="CAIP" version="8.1" />

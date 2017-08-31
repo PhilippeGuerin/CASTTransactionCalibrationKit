@@ -14,7 +14,7 @@ DECLARE
   v_cal_mergeroot_id integer;
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.2.x - 1.9.6
+-- Version 8.2.x - 1.9.7
   if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_DF_DELETE_RULE for appli_id ' || to_char(I_Appli_ID) || 'ENTRANCE ');   end if;
       -- Data entities are push to DELETED (8).
  UPDATE dss_datafunction df
@@ -36,6 +36,7 @@ from cdt_objects cob
 	 or cob.object_type_str = 'CICS DataSet'
          or cob.object_type_str = 'SQL Table'
          or cob.object_type_str = 'Oracle table'
+         or cob.object_type_str = 'Table'
          or cob.object_type_str = 'SAP Table'
          or cob.object_type_str = 'Sybase table'
          or cob.object_type_str = 'Microsoft table'
@@ -58,6 +59,10 @@ from cdt_objects cob
 		 )
      and (
          upper(cob.object_name) like '%_DUAL%'
+		 or upper(cob.object_name) SIMILAR TO '%_[0-9]+'
+		 or upper(cob.object_name) SIMILAR TO '%-[0-9]+'
+		 or upper(cob.object_name) like '%_ARCHIVE'
+		 or upper(cob.object_name) like '%-ARCHIVE'
 		 or upper(cob.object_name) like 'TEST'
 		 or upper(cob.object_name) like 'TEST?'
 		 or upper(cob.object_name) like 'ERROR'
@@ -165,7 +170,7 @@ $BODY$
 DECLARE  
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.2.x - 1.9.6
+-- Version 8.2.x - 1.9.7
 	if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_DF_ADJ_DETRET_RULE for appli_id ' || to_char(I_Appli_ID) || ' ENTRANCE'); end if;
 	if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_DF_ADJ_DETRET_RULE for appli_id ' || to_char(I_Appli_ID) || ' EXIT'); end if;
     if ( I_CUSTOM_TRACE >  0 ) then  perform custom_tcc_fp_usr_df_adj_detret_rule(i_appli_id, i_custom_trace);   end if;
@@ -194,7 +199,7 @@ $BODY$
 DECLARE  
 L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.2.x - 1.9.6
+-- Version 8.2.x - 1.9.7
      if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_DF_IGNORE_RULE for appli_id ' || to_char(I_Appli_ID)|| ' ENTRANCE'); end if; 
 --- Ignore Unknown data entities
 perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_DF_IGNORE_RULE for appli_id ' || to_char(I_Appli_ID) || ' Ignore Unknown data entities'); 
@@ -233,6 +238,7 @@ from cdt_objects cob
      and (cob.object_type_str = 'SQL Table'
          or cob.object_type_str = 'Oracle table'
          or cob.object_type_str = 'SAP Table'
+         or cob.object_type_str = 'Table'
          or cob.object_type_str = 'Sybase table'
          or cob.object_type_str = 'Microsoft table'
          or cob.object_type_str = 'SQL Server UDT TABLE'
@@ -269,20 +275,34 @@ from cdt_objects cob
       and df.cal_flags < 260   
      and df.cal_mergeroot_id = 0            --> ...except for child merged objects
      and (cob.object_type_str = 'Cobol File Link'
-             or cob.object_type_str = 'SQL Table'
+         or cob.object_type_str = 'SQL Table'
          or cob.object_type_str = 'Oracle table'
          or cob.object_type_str = 'SAP Table'
+         or cob.object_type_str = 'Table'
          or cob.object_type_str = 'Sybase table'
          or cob.object_type_str = 'Microsoft table'
          or cob.object_type_str = 'SQL Server UDT TABLE'
+		 or cob.object_type_str = 'Siebel Table Data (Intersection)'
+         or cob.object_type_str = 'Siebel Table Data (Private)'
+         or cob.object_type_str = 'Siebel Table Data (Public)'
+         or cob.object_type_str = 'Siebel Table Dictionary'
+         or cob.object_type_str = 'Siebel Table Extension'
+         or cob.object_type_str = 'Siebel Table Extension (Siebel)'
+         or cob.object_type_str = 'Siebel Table External'
+         or cob.object_type_str = 'Siebel Table External View'
+         or cob.object_type_str = 'Siebel Table Interface'
+         or cob.object_type_str = 'Siebel Table Log'
+         or cob.object_type_str = 'Siebel Table Repository'
+         or cob.object_type_str = 'Siebel Table Virtual Table'
+         or cob.object_type_str = 'Siebel Table Warehouse'
 		 or cob.object_type_str = 'DB400Table'
 		 or cob.object_type_str = 'DDL Database Table')
             and (
                 upper(cob.object_name) like '%ADMIN%'
              or upper(cob.object_name) like '%ALERT%'
              or upper(cob.object_name) like '%ARCHIVE%'
-	     or upper(cob.object_name) like '%COPY%'
-	     or upper(cob.object_name) like '%TEMP\-%'
+	         or upper(cob.object_name) like '%COPY%'
+	         or upper(cob.object_name) like '%TEMP\-%'
              or upper(cob.object_name) like '%EXTRACT%'
              or upper(cob.object_name) like '%CONFIG%'
              or upper(cob.object_name) like '%DEFAULT%'
@@ -320,7 +340,7 @@ from cdt_objects cob
              or upper(cob.object_name) like '%\-STG%'
              or upper(cob.object_name) like '%\-TECH_%'
              or upper(cob.object_name) like '%\-TYPE%'
-            -- or upper(cob.object_name) SIMILAR TO '%[0-9]+'
+             or upper(cob.object_name) SIMILAR TO '%_[0-9]+'
              -- or upper(cob.object_name) like '%FILE%'
              --<Application>Specific
             or upper(cob.object_name) SIMILAR TO '\?'
@@ -435,12 +455,28 @@ L_ERRORCODE          INTEGER DEFAULT 0;
     select o.object_name, d.object_id fp_id
       from cdt_objects o, dss_datafunction d
      where o.object_id = d.maintable_id
-       and d.cal_flags in (0, 2)
-       and o.object_name in (
+		and d.cal_flags in (0, 2)
+		and ( d.cal_flags & 8 ) = 0           --> ...except for data functions which are std and deleted (8)
+		and ( d.cal_flags & 136 ) = 0           --> ...except for data functions which are external script and deleted (136)
+		and ( d.cal_flags & 10 ) = 0           --> ...except for data functions which are root and deleted (10)
+		and ( d.cal_flags & 140 ) = 0           --> ...except for data functions which are root and deleted and external script (140)
+		and ( d.cal_flags & 256 ) = 0           --> ...except for data functions which are ignored (256)
+		and ( d.cal_flags & 258 ) = 0           --> ...except for data functions which are root and ignored (258)
+		and ( d.cal_flags & 260 ) = 0           --> ...except for data functions which are child and ignored (260)
+		and d.cal_flags < 260 
+		and o.object_name in (
          select o.object_name
            from cdt_objects o, dss_datafunction d
           where o.object_id = d.maintable_id
             and d.cal_flags in (0, 2)
+			and ( d.cal_flags & 8 ) = 0           --> ...except for data functions which are std and deleted (8)
+			and ( d.cal_flags & 136 ) = 0           --> ...except for data functions which are external script and deleted (136)
+			and ( d.cal_flags & 10 ) = 0           --> ...except for data functions which are root and deleted (10)
+			and ( d.cal_flags & 140 ) = 0           --> ...except for data functions which are root and deleted and external script (140)
+			and ( d.cal_flags & 256 ) = 0           --> ...except for data functions which are ignored (256)
+			and ( d.cal_flags & 258 ) = 0           --> ...except for data functions which are root and ignored (258)
+			and ( d.cal_flags & 260 ) = 0           --> ...except for data functions which are child and ignored (260)
+			and d.cal_flags < 260   
           group by o.object_name, o.object_type_str
          having count(1) > 1)
      order by d.appli_id, o.object_type_str, o.object_name, d.cal_flags desc, d.object_id, o.object_fullname ;
@@ -450,7 +486,15 @@ L_ERRORCODE          INTEGER DEFAULT 0;
       from cdt_objects o, dss_datafunction d
      where o.object_id = d.maintable_id
        and d.cal_flags in (0, 2)
-       and length(substring(o.object_name from '([a-zA-Z0-9\-\_]+)[0-9]+$')) > 2 -- Minimum prefix size
+		and ( d.cal_flags & 8 ) = 0           --> ...except for data functions which are std and deleted (8)
+		and ( d.cal_flags & 136 ) = 0           --> ...except for data functions which are external script and deleted (136)
+		and ( d.cal_flags & 10 ) = 0           --> ...except for data functions which are root and deleted (10)
+		and ( d.cal_flags & 140 ) = 0           --> ...except for data functions which are root and deleted and external script (140)
+		and ( d.cal_flags & 256 ) = 0           --> ...except for data functions which are ignored (256)
+		and ( d.cal_flags & 258 ) = 0           --> ...except for data functions which are root and ignored (258)
+		and ( d.cal_flags & 260 ) = 0           --> ...except for data functions which are child and ignored (260)
+		and d.cal_flags < 260 
+		and length(substring(o.object_name from '([a-zA-Z0-9\-\_]+)[0-9]+$')) > 2 -- Minimum prefix size
        and d.appli_id = i_appli_id
 	   order by prefix_name asc ;
 -- Cursor for Similar matching grouping with second section of part similar.
@@ -458,13 +502,21 @@ L_ERRORCODE          INTEGER DEFAULT 0;
       select substring(o.object_name from '([a-zA-Z0-9\-\_]+)(\_|\-)[\-\_a-zA-Z0-9]+$') prefix_name, d.object_id fp_id, d.appli_id
       from cdt_objects o, dss_datafunction d	
      where o.object_id = d.maintable_id
-       and d.cal_flags in (0, 2)
+		and d.cal_flags in (0, 2)
+		and ( d.cal_flags & 8 ) = 0           --> ...except for data functions which are std and deleted (8)
+		and ( d.cal_flags & 136 ) = 0           --> ...except for data functions which are external script and deleted (136)
+		and ( d.cal_flags & 10 ) = 0           --> ...except for data functions which are root and deleted (10)
+		and ( d.cal_flags & 140 ) = 0           --> ...except for data functions which are root and deleted and external script (140)
+		and ( d.cal_flags & 256 ) = 0           --> ...except for data functions which are ignored (256)
+		and ( d.cal_flags & 258 ) = 0           --> ...except for data functions which are root and ignored (258)
+		and ( d.cal_flags & 260 ) = 0           --> ...except for data functions which are child and ignored (260)
+		and d.cal_flags < 260 
        and length(substring(o.object_name from '([a-zA-Z0-9\-\_]+)(\_|\-)[a-zA-Z0-9]+$')) > 2 -- Minimum prefix size
        and d.appli_id = i_appli_id
 	   order by prefix_name asc ;
       
 Begin 
--- Version 8.2.x - 1.9.6
+-- Version 8.2.x - 1.9.7
      if ( I_CUSTOM_TRACE >  0 )
        then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_DF_GROUP_RULE for appli_id ' || to_char(I_Appli_ID));
 
@@ -507,6 +559,14 @@ Begin
           from dss_datafunction df, cdt_objects o
          where df.maintable_id = o.object_id
            and o.object_name = r2.prefix_name
+		   	and ( df.cal_flags & 8 ) = 0           --> ...except for data functions which are std and deleted (8)
+			and ( df.cal_flags & 136 ) = 0           --> ...except for data functions which are external script and deleted (136)
+			and ( df.cal_flags & 10 ) = 0           --> ...except for data functions which are root and deleted (10)
+			and ( df.cal_flags & 140 ) = 0           --> ...except for data functions which are root and deleted and external script (140)
+			and ( df.cal_flags & 256 ) = 0           --> ...except for data functions which are ignored (256)
+			and ( df.cal_flags & 258 ) = 0           --> ...except for data functions which are root and ignored (258)
+			and ( df.cal_flags & 260 ) = 0           --> ...except for data functions which are child and ignored (260)
+			and df.cal_flags < 260 
            and df.appli_id = r2.appli_id;
                
         if(v_cal_flags = 0) then
@@ -565,6 +625,14 @@ Begin
           from dss_datafunction df, cdt_objects o
          where df.maintable_id = o.object_id
            and o.object_name = r2.prefix_name
+		    and ( df.cal_flags & 8 ) = 0           --> ...except for data functions which are std and deleted (8)
+			and ( df.cal_flags & 136 ) = 0           --> ...except for data functions which are external script and deleted (136)
+			and ( df.cal_flags & 10 ) = 0           --> ...except for data functions which are root and deleted (10)
+			and ( df.cal_flags & 140 ) = 0           --> ...except for data functions which are root and deleted and external script (140)
+			and ( df.cal_flags & 256 ) = 0           --> ...except for data functions which are ignored (256)
+			and ( df.cal_flags & 258 ) = 0           --> ...except for data functions which are root and ignored (258)
+			and ( df.cal_flags & 260 ) = 0           --> ...except for data functions which are child and ignored (260)
+			and df.cal_flags < 260
            and df.appli_id = r2.appli_id;
                
         if(v_cal_flags = 0) then
@@ -658,7 +726,7 @@ $BODY$
 DECLARE  
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.2.x - 1.9.6
+-- Version 8.2.x - 1.9.7
 	if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_DF_ADJ_TYPE_RULE for appli_id ' || to_char(I_Appli_ID) || ' ENTRANCE '); 	end if;
 
  UPDATE dss_datafunction df 
@@ -756,7 +824,7 @@ DECLARE
   v_fp_id integer;
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.2.x - 1.9.6
+-- Version 8.2.x - 1.9.7
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_TF_DELETE_RULE for appli_id ' || to_char(I_Appli_ID)|| 'ENTRANCE '); end if;
 	
    -- DELETE
@@ -816,7 +884,7 @@ $BODY$
 DECLARE 
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.2.x - 1.9.6
+-- Version 8.2.x - 1.9.7
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_TF_IGNORE_RULE for appli_id ' || to_char(I_Appli_ID) || ' ENTRANCE'); end if;
 	
 UPDATE dss_transaction tra
@@ -883,7 +951,15 @@ DECLARE
            select o.object_name
              from cdt_objects o, dss_transaction d
             where o.object_id = d.form_id
-              and d.cal_flags in (0, 2)
+               and d.cal_flags in (0, 2)  
+		       and ( d.cal_flags & 8 ) = 0           --> ...except for data functions which are std and deleted (8)
+			   and ( d.cal_flags & 136 ) = 0           --> ...except for data functions which are external script and deleted (136)
+			   and ( d.cal_flags & 10 ) = 0           --> ...except for data functions which are root and deleted (10)
+			   and ( d.cal_flags & 140 ) = 0           --> ...except for data functions which are root and deleted and external script (140)
+			   and ( d.cal_flags & 256 ) = 0           --> ...except for data functions which are ignored (256)
+			   and ( d.cal_flags & 258 ) = 0           --> ...except for data functions which are root and ignored (258)
+			   and ( d.cal_flags & 260 ) = 0           --> ...except for data functions which are child and ignored (260)
+			   and d.cal_flags < 260  
               and o.object_name <> 'main' --Java/C Method main
 			  and o.object_type_str not in ('Java Method','.NET Method','C# Method','C++ Method', 'WPF XAML Control', 'WPF XAML Custom Control', 'Silverlight XAML Control', 'Silverlight XAML Custom Control')
           and o.object_name <> 'run' --Java/C Method main
@@ -897,11 +973,19 @@ DECLARE
           from cdt_objects o, dss_transaction d
         where o.object_id = d.form_id
           and d.cal_flags in (0, 2)
+		  and ( d.cal_flags & 8 ) = 0           --> ...except for data functions which are std and deleted (8)
+		  and ( d.cal_flags & 136 ) = 0           --> ...except for data functions which are external script and deleted (136)
+		  and ( d.cal_flags & 10 ) = 0           --> ...except for data functions which are root and deleted (10)
+		  and ( d.cal_flags & 140 ) = 0           --> ...except for data functions which are root and deleted and external script (140)
+		  and ( d.cal_flags & 256 ) = 0           --> ...except for data functions which are ignored (256)
+		  and ( d.cal_flags & 258 ) = 0           --> ...except for data functions which are root and ignored (258)
+		  and ( d.cal_flags & 260 ) = 0           --> ...except for data functions which are child and ignored (260)
+		  and d.cal_flags < 260
           and length(substring(o.object_name from '([a-zA-Z0-9\-\_]+)\_[a-zA-Z0-9]+$')) > 4 -- Minimum prefix size
 		  and d.appli_id = i_appli_id
           order by prefix_name asc ;
 Begin 
--- Version 8.2.x - 1.9.6
+-- Version 8.2.x - 1.9.7
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_TF_GROUP_RULE for appli_id ' || to_char(I_Appli_ID) || 'ENTRANCE'); end if;
 
  -- Add the delete and ignore here (SCRAIP-27718)
@@ -942,6 +1026,14 @@ Begin
           from dss_transaction df, cdt_objects o
          where df.form_id = o.object_id
            and o.object_name = r2.prefix_name
+		   and ( df.cal_flags & 8 ) = 0           --> ...except for data functions which are std and deleted (8)
+		   and ( df.cal_flags & 136 ) = 0           --> ...except for data functions which are external script and deleted (136)
+		   and ( df.cal_flags & 10 ) = 0           --> ...except for data functions which are root and deleted (10)
+		   and ( df.cal_flags & 140 ) = 0           --> ...except for data functions which are root and deleted and external script (140)
+		   and ( df.cal_flags & 256 ) = 0           --> ...except for data functions which are ignored (256)
+		   and ( df.cal_flags & 258 ) = 0           --> ...except for data functions which are root and ignored (258)
+		   and ( df.cal_flags & 260 ) = 0           --> ...except for data functions which are child and ignored (260)
+		   and df.cal_flags < 260
            and df.appli_id = r2.appli_id;
                
         if(v_cal_flags = 0) then
@@ -1026,7 +1118,7 @@ $BODY$
 DECLARE 
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.2.x - 1.9.6
+-- Version 8.2.x - 1.9.7
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_TF_ADJ_DET_RULE ENTRANCE'); end if;
 	if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_TF_ADJ_DET_RULE EXIT'); end if;
 	if ( I_CUSTOM_TRACE >  0 ) then  perform custom_tcc_fp_usr_tf_adj_det_rule(i_custom_trace);   end if;
@@ -1053,7 +1145,7 @@ $BODY$
 DECLARE  
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.2.x - 1.9.6
+-- Version 8.2.x - 1.9.7
 	if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_TF_ADJ_TYPE_RULE ENTRANCE');  end if;
 	  UPDATE dss_transaction tra
      set user_isinput = 0
@@ -1107,7 +1199,7 @@ $BODY$
 DECLARE 
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.2.x - 1.9.6
+-- Version 8.2.x - 1.9.7
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_TF_ADJ_FTR_RULE ENTRANCE'); end if;
 	
 
@@ -1139,7 +1231,7 @@ $BODY$
 DECLARE 
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.2.x - 1.9.6
+-- Version 8.2.x - 1.9.7
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- TCC_FP_USR_FINAL_RULE ENTRANCE'); end if;
 UPDATE dss_transaction tra
     set user_fp_value = 4
@@ -1224,7 +1316,7 @@ $$
 DECLARE  
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.2.x - 1.9.6
+-- Version 8.2.x - 1.9.7
   if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- Custom_TCC_FP_USR_DF_DELETE_RULE for appli_id ' || to_char(I_Appli_ID) || 'ENTRANCE ');   end if;
 
   if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- Custom_TCC_FP_USR_DF_DELETE_RULE for appli_id ' || to_char(I_Appli_ID) || 'EXIT ');   end if;	
@@ -1238,7 +1330,7 @@ $$
 DECLARE  
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.2.x - 1.9.6
+-- Version 8.2.x - 1.9.7
 	if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- Custom_TCC_FP_USR_DF_ADJ_DETRET_RULE for appli_id ' || to_char(I_Appli_ID) || ' ENTRANCE'); end if;
 
 	if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- Custom_TCC_FP_USR_DF_ADJ_DETRET_RULE for appli_id ' || to_char(I_Appli_ID) || ' EXIT'); end if;
@@ -1254,7 +1346,7 @@ $$
 DECLARE  
 L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.2.x - 1.9.6
+-- Version 8.2.x - 1.9.7
      if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- Custom_TCC_FP_USR_DF_IGNORE_RULE for appli_id ' || to_char(I_Appli_ID)|| ' ENTRANCE'); end if; 
 
      if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- Custom_TCC_FP_USR_DF_IGNORE_RULE for appli_id ' || to_char(I_Appli_ID)|| ' EXIT'); end if; 
@@ -1268,7 +1360,7 @@ $$
 DECLARE 
 L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.2.x - 1.9.6
+-- Version 8.2.x - 1.9.7
      if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- custom_TCC_FP_USR_DF_GROUP_RULE for appli_id ' || to_char(I_Appli_ID)|| ' EXIT'); end if;
  
      if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- custom_TCC_FP_USR_DF_GROUP_RULE for appli_id ' || to_char(I_Appli_ID)|| ' EXIT'); end if; 
@@ -1282,7 +1374,7 @@ $$
 DECLARE  
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.2.x - 1.9.6
+-- Version 8.2.x - 1.9.7
 	if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- custom_TCC_FP_USR_DF_ADJ_TYPE_RULE for appli_id ' || to_char(I_Appli_ID) || ' ENTRANCE '); 	end if;
           
 	if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- custom_TCC_FP_USR_DF_ADJ_TYPE_RULE for appli_id ' || to_char(I_Appli_ID) || ' EXIT '); 	end if;
@@ -1296,7 +1388,7 @@ $$
 DECLARE 
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.2.x - 1.9.6
+-- Version 8.2.x - 1.9.7
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- custom_TCC_FP_USR_TF_DELETE_RULE for appli_id ' || to_char(I_Appli_ID)|| 'ENTRANCE '); end if;
 	
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- custom_TCC_FP_USR_TF_DELETE_RULE for appli_id ' || to_char(I_Appli_ID)|| 'EXIT '); end if;       
@@ -1311,7 +1403,7 @@ $$
 DECLARE 
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.2.x - 1.9.6
+-- Version 8.2.x - 1.9.7
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- custom_TCC_FP_USR_TF_IGNORE_RULE for appli_id ' || to_char(I_Appli_ID) || ' ENTRANCE'); end if;
 
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- custom_TCC_FP_USR_TF_IGNORE_RULE for appli_id ' || to_char(I_Appli_ID) || ' EXIT'); end if;
@@ -1325,7 +1417,7 @@ $$
 DECLARE 
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.2.x - 1.9.6
+-- Version 8.2.x - 1.9.7
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- custom_TCC_FP_USR_TF_GROUP_RULE for appli_id ' || to_char(I_Appli_ID) || 'ENTRANCE'); end if;
 
 	if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- custom_TCC_FP_USR_TF_GROUP_RULE for appli_id ' || to_char(I_Appli_ID) || 'EXIT '); end if;	  
@@ -1339,7 +1431,7 @@ $$
 DECLARE 
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.2.x - 1.9.6
+-- Version 8.2.x - 1.9.7
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- custom_TCC_FP_USR_TF_ADJ_DET_RULE ENTRANCE'); end if;
 	
 	if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- custom_TCC_FP_USR_TF_ADJ_DET_RULE EXIT'); end if;
@@ -1353,7 +1445,7 @@ $$
 DECLARE  
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.2.x - 1.9.6
+-- Version 8.2.x - 1.9.7
 	if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- custom_TCC_FP_USR_TF_ADJ_TYPE_RULE ENTRANCE');  end if;
 
 	if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- custom_TCC_FP_USR_TF_ADJ_TYPE_RULE EXIT');  end if;
@@ -1367,7 +1459,7 @@ $$
 DECLARE 
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.2.x - 1.9.6
+-- Version 8.2.x - 1.9.7
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- custom_TCC_FP_USR_TF_ADJ_FTR_RULE ENTRANCE'); end if;
 		  
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- custom_TCC_FP_USR_TF_ADJ_FTR_RULE EXIT'); end if;
@@ -1382,7 +1474,7 @@ $$
 DECLARE 
  L_ERRORCODE          INTEGER DEFAULT 0;
 Begin 
--- Version 8.2.x - 1.9.6
+-- Version 8.2.x - 1.9.7
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- custom_TCC_FP_USR_FINAL_RULE ENTRANCE'); end if;
 			
     if ( I_CUSTOM_TRACE >  0 ) then  perform cast_log('TCC-FP-CUSTOM- custom_TCC_FP_USR_FINAL_RULE EXIT'); end if;
